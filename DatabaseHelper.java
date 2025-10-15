@@ -45,7 +45,7 @@ public class DatabaseHelper<Model> {
         return null;
     }
 
-
+    // findWhere
     public ArrayList<Model> findWhere(HashMap<String><String> params) {
         ArrayList<Model> results = new ArrayList<>();
 
