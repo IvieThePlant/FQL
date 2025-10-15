@@ -8,17 +8,14 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class DatabaseHelper<Model> {
-    Class modelClass;
-
+public class DatabaseHelper<Model extends DatabaseModel> {
     private File dbFile;
     private String[] columnHeaders;
     private ArrayList<Model> records = new ArrayList<>();
 
     // constructor
-    public DatabaseHelper(Class model) {
-        this.modelClass = model.getClass();
-        this.dbFile = new File(model.getSimpleName() + "_db.csv");
+    public DatabaseHelper() {
+        this.dbFile = new File(this.getClass().getSimpleName() + "_db.csv");
 
         // create file if it doesn't exist
         if (!dbFile.exists()) {
@@ -34,8 +31,8 @@ public class DatabaseHelper<Model> {
     }
 
     // find
-    public <Model> find(int id) {
-        for (<Model> record : records) {
+    public Model find(int id) {
+        for (Model record : records) {
             if (record.id == id) {
                 return record;
             }
@@ -44,11 +41,11 @@ public class DatabaseHelper<Model> {
     }
 
     // findWhere
-    public ArrayList<Model> findWhere(HashMap<String><String> params) {
+    public ArrayList<Model> findWhere(HashMap<String, String> params) {
         ArrayList<Model> results = new ArrayList<>();
 
-        for (<Model> record : records) {
-            if (record.match(params)) {
+        for (Model record : records) {
+            if (record.paramMatch(params)) {
                 results.add(record);
             }
         }
@@ -56,7 +53,7 @@ public class DatabaseHelper<Model> {
         return results;
     }
 
-    public <Model> first() {
+    public Model first() {
         return find(1);
     }
 
@@ -66,22 +63,22 @@ public class DatabaseHelper<Model> {
     }
 
     // add
-    public void add(<Model> record) {
+    public void add(Model record) {
         records.add(record);
         writeToFile();
     }
 
     // delete
-    public void delete(<Model> record) {
+    public void delete(Model record) {
         records.remove(record);
         writeToFile();
     }
 
     // update
-    public void update(<Model> record) {
-        for (i = 0; i < records.count(); i++) {
-            if (records[i].id == record.id) {
-                records[i] = record;
+    public void update(Model record) {
+        for (int i = 0; i < count(); i++) {
+            if (records.get(i).id == record.id) {
+                records.set(i, record);
                 writeToFile();
                 return;
             }
@@ -90,7 +87,7 @@ public class DatabaseHelper<Model> {
 
     // count
     public int count() {
-        return records.count();
+        return records.size();
     }
 
     // clear
@@ -136,7 +133,7 @@ public class DatabaseHelper<Model> {
                 String line = scanner.nextLine();
                 columnHeaders = line.split(",");
             } else {
-                columnHeaders = modelClass.getColumns();
+                columnHeaders = this.getClass().getColumns();
             }
 
             // read each line and make a record
