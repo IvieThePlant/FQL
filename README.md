@@ -5,12 +5,8 @@ A .csv based alternative to databases, made for students who "just aren't ready 
 ## Features
 
 - Simple CSV file storage
-- Basic querying capabilities
 - Easy to use syntax
-- Lightweight and fast
-- No setup required
 - Portable and easy to share
-- Suitable for small to medium-sized datasets
 
 ## Installation
 
