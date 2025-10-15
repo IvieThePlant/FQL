@@ -116,6 +116,17 @@ public class DatabaseHelper<Model> {
         return dbFile.getName();
     }
 
+    // toString
+    public String toString() {
+        String result = "Database: " + dbFile.getName() + "\n";
+        result += "Columns: " + String.join(", ", columnHeaders) + "\n";
+        result += "Records:\n";
+        for (Model record : records) {
+            result += record.toString() + "\n";
+        }
+        return result;
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
