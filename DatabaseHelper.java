@@ -106,6 +106,11 @@ public class DatabaseHelper<Model> {
         return columnHeaders;
     }
 
+    // getFilePath
+    public String getFilePath() {
+        return dbFile.getAbsolutePath();
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
