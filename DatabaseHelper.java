@@ -9,13 +9,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class DatabaseHelper<Model extends DatabaseModel> {
+    private Class<Model> modelClass;
     private File dbFile;
     private String[] columnHeaders;
     private ArrayList<Model> records = new ArrayList<>();
 
     // constructor
     public DatabaseHelper() {
-        this.dbFile = new File(this.getClass().getSimpleName() + "_db.csv");
+        this.dbFile = new File(modelClass.getSimpleName() + "_db.csv");
 
         // create file if it doesn't exist
         if (!dbFile.exists()) {
@@ -27,7 +28,7 @@ public class DatabaseHelper<Model extends DatabaseModel> {
         }
 
         // read file and populate records
-        records = readFromFile();
+        readFromFile();
     }
 
     // find
@@ -124,7 +125,7 @@ public class DatabaseHelper<Model extends DatabaseModel> {
 
     // private read file
     // reads the db file and makes record for each line
-    private ArrayList<Model> readFromFile() {
+    private void readFromFile() {
         try {
             Scanner scanner = new Scanner(dbFile);
 
@@ -133,7 +134,12 @@ public class DatabaseHelper<Model extends DatabaseModel> {
                 String line = scanner.nextLine();
                 columnHeaders = line.split(",");
             } else {
-                columnHeaders = this.getClass().getColumns();
+                // If no headers, try to get them from the model class fields
+                java.lang.reflect.Field[] fields = modelClass.getDeclaredFields();
+                columnHeaders = new String[fields.length];
+                for (int i = 0; i < fields.length; i++) {
+                    columnHeaders[i] = fields[i].getName();
+                }
             }
 
             // read each line and make a record
@@ -142,18 +148,27 @@ public class DatabaseHelper<Model extends DatabaseModel> {
                 String[] values = line.split(",");
 
                 // build the record hashMap
-                if (columnHeaders.count() == values.count()) {
-                    HashMap<String, String> recordHash = new HashMap<><>();
-                    for (i = 0; i < columnHeaders.count(); i++) {
-                        recordHash[columnHeaders[i]] = values[i];
+                if (columnHeaders.length == values.length) {
+                    HashMap<String, String> recordHash = new HashMap<String,String>();
+                    for (int i = 0; i < columnHeaders.length; i++) {
+                        recordHash.put(columnHeaders[i], values[i]);
                     }
 
                     // create a new instance of the model class
-                    records.add(new modelClass(recordHash));
+                    try {
+                        records.add(modelClass.getConstructor(HashMap.class).newInstance(recordHash));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    throw Exception("A csv record is missing a column!")
+                    try {
+                        throw new Exception("A csv record is missing a column!");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            scanner.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
