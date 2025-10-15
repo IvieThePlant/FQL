@@ -101,6 +101,11 @@ public class DatabaseHelper<Model> {
         writeToFile();
     }
 
+    // getColumns
+    public String[] getColumns() {
+        return columnHeaders;
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
