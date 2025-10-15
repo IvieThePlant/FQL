@@ -80,8 +80,15 @@ public class DatabaseHelper<Model> {
     }
 
     // update
-
-    // where
+    public void update(<Model> record) {
+        for (i = 0; i < records.count(); i++) {
+            if (records[i].id == record.id) {
+                records[i] = record;
+                writeToFile();
+                return;
+            }
+        }
+    }
 
     // private read file
     // reads the db file and makes record for each line
