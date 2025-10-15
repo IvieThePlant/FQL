@@ -111,6 +111,11 @@ public class DatabaseHelper<Model> {
         return dbFile.getAbsolutePath();
     }
 
+    // getFileName
+    public String getFileName() {
+        return dbFile.getName();
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
