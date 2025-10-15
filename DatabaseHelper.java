@@ -74,6 +74,10 @@ public class DatabaseHelper<Model> {
     }
 
     // delete
+    public void delete(<Model> record) {
+        records.remove(record);
+        writeToFile();
+    }
 
     // update
 
