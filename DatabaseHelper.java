@@ -90,6 +90,11 @@ public class DatabaseHelper<Model> {
         }
     }
 
+    // count
+    public int count() {
+        return records.count();
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
