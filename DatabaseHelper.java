@@ -95,6 +95,12 @@ public class DatabaseHelper<Model> {
         return records.count();
     }
 
+    // clear
+    public void clear() {
+        records.clear();
+        writeToFile();
+    }
+
     // private read file
     // reads the db file and makes record for each line
     private ArrayList<Model> readFromFile() {
