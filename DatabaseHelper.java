@@ -36,8 +36,36 @@ public class DatabaseHelper<Model> {
     }
 
     // find
+    public <Model> find(int id) {
+        for (<Model> record : records) {
+            if (record.id == id) {
+                return record;
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Model> findWhere(HashMap<String><String> params) {
+        ArrayList<Model> results = new ArrayList<>();
+
+        for (<Model> record : records) {
+            if (record.match(params)) {
+                results.add(record);
+            }
+        }
+
+        return results;
+    }
+
+    public <Model> first() {
+        return find(1);
+    }
 
     // all
+    public ArrayList<Model> all() {
+            return records;
+    }
 
     // add
 
@@ -78,7 +106,7 @@ public class DatabaseHelper<Model> {
                 } else {
                     throw Exception("A csv record is missing a column!")
                 }
-            } 
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
