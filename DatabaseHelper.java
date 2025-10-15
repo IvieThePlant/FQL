@@ -68,6 +68,10 @@ public class DatabaseHelper<Model> {
     }
 
     // add
+    public void add(<Model> record) {
+        records.add(record);
+        writeToFile();
+    }
 
     // delete
 
