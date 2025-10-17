@@ -8,14 +8,16 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class DatabaseHelper<Model extends DatabaseModel> {
-    private Class<Model> modelClass;
+public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
+    private Class modelClass;
     private File dbFile;
     private String[] columnHeaders;
     private ArrayList<Model> records = new ArrayList<>();
 
     // constructor
-    public DatabaseHelper() {
+    public DatabaseHelper(Class modelClass) {
+        this.modelClass = modelClass;
+
         this.dbFile = new File(modelClass.getSimpleName() + "_db.csv");
 
         // create file if it doesn't exist
@@ -84,6 +86,7 @@ public class DatabaseHelper<Model extends DatabaseModel> {
                 return;
             }
         }
+        add(record);
     }
 
     // count
@@ -156,7 +159,8 @@ public class DatabaseHelper<Model extends DatabaseModel> {
 
                     // create a new instance of the model class
                     try {
-                        records.add(modelClass.getConstructor(HashMap.class).newInstance(recordHash));
+                        // records.add((modelClass.getClass()) modelClass.getConstructor(HashMap.class).newInstance(recordHash));
+                        records.add((Model) modelClass.getConstructor().newInstance(recordHash));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
