@@ -1,3 +1,4 @@
+package src;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,12 +66,12 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
 
     // delete
     public void delete(Model record) {
-        dbHelper().delete(record);
+        record.dbHelper().delete(record);
     }
 
     // update
     public void update(Model record) {
-        dbHelper().update(record);
+        record.dbHelper().update(record);
     }
 
     // count
@@ -95,7 +96,7 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
 
     public abstract boolean paramMatch(HashMap<String, String> params);
 
-    abstract String[] getColumns(); // This should also be static
+    public abstract String[] getColumns(); // This should also be static
 
     public abstract String toString();
 }

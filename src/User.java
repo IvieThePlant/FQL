@@ -1,3 +1,4 @@
+package src;
 import java.util.HashMap;
 
 public class User extends DatabaseModel<User> {
@@ -55,6 +56,5 @@ public class User extends DatabaseModel<User> {
     @Override
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
-    }
-    
+    } 
 }
