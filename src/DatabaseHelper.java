@@ -1,4 +1,5 @@
 package src;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,29 +11,29 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
-    private Class modelClass;
+    private Class<Model> modelClass;
     private File dbFile;
     private String[] columnHeaders;
     private ArrayList<Model> records = new ArrayList<>();
 
     // constructor
-    public DatabaseHelper(Class modelClass) {
-        this.modelClass = modelClass;
-
-        this.dbFile = new File(modelClass.getSimpleName() + "_db.csv");
-
-        // create file if it doesn't exist
-        if (!dbFile.exists()) {
-            try {
-                dbFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        public DatabaseHelper(Class<Model> modelClass) {
+            this.modelClass = modelClass;
+    
+            this.dbFile = new File(modelClass.getSimpleName() + "_db.csv");
+    
+            // create file if it doesn't exist
+            if (!dbFile.exists()) {
+                try {
+                    dbFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+    
+            // read file and populate records
+            readFromFile();
         }
-
-        // read file and populate records
-        readFromFile();
-    }
 
     // find
     public Model find(int id) {
@@ -160,8 +161,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
                     // create a new instance of the model class
                     try {
-                        // records.add((modelClass.getClass()) modelClass.getConstructor(HashMap.class).newInstance(recordHash));
-                        records.add((Model) modelClass.getConstructor().newInstance(recordHash));
+                        records.add(modelClass.getConstructor(HashMap.class).newInstance(recordHash));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
