@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
+public final class DatabaseHelper<Model extends DatabaseModel> {
     private Class<Model> modelClass;
     private File dbFile;
     private String[] columnHeaders;
