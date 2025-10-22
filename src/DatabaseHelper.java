@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     /* TODO:
@@ -42,8 +42,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
             if (!Files.exists(this.dbFile)) {
                 Files.createFile(this.dbFile);
                 // write header line
-                String headerLine = String.join(",", this.columnHeaders) + "\n";
-                Files.write(this.dbFile, headerLine.getBytes());
+                writeToFile();
             } else {
                 // load existing records from file
                 loadFromFile();
@@ -54,6 +53,10 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     }
 
     private void loadFromFile() {
+        // TODO
+    }
+
+    private void writeToFile() throws IOException {
         // TODO
     }
 }
