@@ -172,11 +172,16 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
                             field.set(record, value);
                             if (field.getType() == int.class) {
                                 field.setInt(record, Integer.parseInt(value));
+                            } else if (field.getType() == double.class) {
+                                field.setDouble(record, Double.parseDouble(value));
+                            } else if (field.getType() == boolean.class) {
+                                field.setBoolean(record, Boolean.parseBoolean(value));
+                            } else if (field.getType() == float.class) {
+                                field.setFloat(record, Float.parseFloat(value));
                             } else {
                                 field.set(record, value);
                             }
                         }
-                        
                         records.add(record);
                     } catch (Exception e) {
                         e.printStackTrace();
