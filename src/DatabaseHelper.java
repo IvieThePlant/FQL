@@ -5,5 +5,6 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
      * [ ] CRUD stuff
      * [ ] first(), all(), where(), count(), clear()
      * [ ] db file name/path
+     * [ ] CSV parsing
      */
 }
