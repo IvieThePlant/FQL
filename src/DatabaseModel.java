@@ -1,17 +1,19 @@
 package src;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.lang.reflect.Field;
 
-abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
+public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     /* TODO: need to implement:
      * [x] id stuff
      * [x] CRUD methods (save, delete) that call DatabaseHelper
      * [x] helper() method to get DatabaseHelper instance
      * [x] columnsFromClass() to specify columns (excluding id)
      * [x] param match
-     * [ ] static methods for all, first, where that call DatabaseHelper
+     * [x] static methods for all, first, where that call DatabaseHelper
      * [ ] toString() for display
      */
 
@@ -114,4 +116,13 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
             return false;
         }
     }
+
+    // Static methods for db actions
+    public static <T extends DatabaseModel<T>> List<T>   all(Class<T> cls)                            { return helperFor(cls).all();         }
+    public static <T extends DatabaseModel<T>> T        find(Class<T> cls, int id)                    { return helperFor(cls).find(id);      }
+    public static <T extends DatabaseModel<T>> List<T> where(Class<T> cls, Map<String,String> params) { return helperFor(cls).where(params); }
+    public static <T extends DatabaseModel<T>> T       first(Class<T> cls)                            { return helperFor(cls).first();       }
+    public static <T extends DatabaseModel<T>> int     count(Class<T> cls)                            { return helperFor(cls).count();       }
+    public static <T extends DatabaseModel<T>> void    clear(Class<T> cls)                            {        helperFor(cls).clear();       }
+
 }
