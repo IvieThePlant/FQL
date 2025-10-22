@@ -47,8 +47,7 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
             return helper;
         } else {
             try {
-                String[] cols = null; // TODO: get columns from field names or method
-                helper = new DatabaseHelper<>((Class<Model>) this.getClass(), cols);
+                helper = new DatabaseHelper<>((Class<Model>) this.getClass(), columnsFromClass(this.getClass()));
                 HELPERS.put(this.getClass(), helper);
                 return helper;
             } catch (Exception e) {
@@ -67,13 +66,16 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
             return helper;
         } else {
             try {
-                String[] cols = null; // TODO: get columns from field names or method
-                helper = new DatabaseHelper<>((Class<AnotherModel>) otherClass, cols);
+                helper = new DatabaseHelper<>((Class<AnotherModel>) otherClass, columnsFromClass(otherClass));
                 HELPERS.put(otherClass, helper);
                 return helper;
             } catch (Exception e) {
                 throw new RuntimeException("Failed to create helper for " + otherClass.getSimpleName(), e);
             }
         }
+    }
+
+    private static String[] columnsFromClass(Class<?> cls) {
+        return new String[] {}; // TODO: implement
     }
 }
