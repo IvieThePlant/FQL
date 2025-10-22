@@ -10,6 +10,7 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
      * [x] CRUD methods (save, delete) that call DatabaseHelper
      * [x] helper() method to get DatabaseHelper instance
      * [x] columnsFromClass() to specify columns (excluding id)
+     * [x] param match
      * [ ] static methods for all, first, where that call DatabaseHelper
      * [ ] toString() for display
      */
@@ -85,5 +86,32 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
             }
         }
         return columns.toArray(new String[0]);
+    }
+
+    // Matching by params uses reflection by default. Subclasses may override for custom logic.
+    public boolean paramMatch(HashMap<String, String> params) {
+        try {
+            // for each param,
+            for (String key : params.keySet()) {
+                // get field by that name (and fail if not found)
+                Field field = this.getClass().getDeclaredField(key);
+                field.setAccessible(true);
+                Object value = field.get(this);
+
+                // if the value is empty or not equal, return false
+                if (value == null || !value.toString().equals(params.get(key))) {
+                    return false;
+                }
+            }
+            
+            // all matched, return true
+            return true;
+
+        } catch (NoSuchFieldException nsf) {
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
