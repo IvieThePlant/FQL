@@ -7,21 +7,14 @@ import java.util.ArrayList;
 import java.lang.reflect.Field;
 
 public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
-    /* TODO: need to implement:
-     * [x] id stuff
-     * [x] CRUD methods (save, delete) that call DatabaseHelper
-     * [x] helper() method to get DatabaseHelper instance
-     * [x] columnsFromClass() to specify columns (excluding id)
-     * [x] param match
-     * [x] static methods for all, first, where that call DatabaseHelper
-     * [ ] toString() for display
-     */
-
     // id == 0 means "not yet persisted". Persisted records will get id > 0.
     public int id = 0;
 
     // static map of helpers per model class
     private static final HashMap<Class<?>, DatabaseHelper<?>> HELPERS = new HashMap<>();
+
+    // Subclasses must have a public no-arg constructor.
+    public DatabaseModel() {}
 
     // save(): add or update db based on id
     @SuppressWarnings("unchecked")
@@ -118,11 +111,10 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     }
 
     // Static methods for db actions
-    public static <T extends DatabaseModel<T>> List<T>   all(Class<T> cls)                            { return helperFor(cls).all();         }
-    public static <T extends DatabaseModel<T>> T        find(Class<T> cls, int id)                    { return helperFor(cls).find(id);      }
-    public static <T extends DatabaseModel<T>> List<T> where(Class<T> cls, Map<String,String> params) { return helperFor(cls).where(params); }
-    public static <T extends DatabaseModel<T>> T       first(Class<T> cls)                            { return helperFor(cls).first();       }
-    public static <T extends DatabaseModel<T>> int     count(Class<T> cls)                            { return helperFor(cls).count();       }
-    public static <T extends DatabaseModel<T>> void    clear(Class<T> cls)                            {        helperFor(cls).clear();       }
-
+    public static <T extends DatabaseModel<T>> ArrayList<T> all(Class<T> cls)                              { return helperFor(cls).all();         }
+    public static <T extends DatabaseModel<T>> T            find(Class<T> cls, int id)                     { return helperFor(cls).find(id);      }
+    public static <T extends DatabaseModel<T>> ArrayList<T> where(Class<T> cls, Map<String,String> params) { return helperFor(cls).where(params); }
+    public static <T extends DatabaseModel<T>> T            first(Class<T> cls)                            { return helperFor(cls).first();       }
+    public static <T extends DatabaseModel<T>> int          count(Class<T> cls)                            { return helperFor(cls).count();       }
+    public static <T extends DatabaseModel<T>> void         clear(Class<T> cls)                            {        helperFor(cls).clear();       }
 }
