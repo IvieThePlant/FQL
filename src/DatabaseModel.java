@@ -1,5 +1,5 @@
 package src;
 
-abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
+abstract class DatabaseModel {
     // TODO: db stuff
 }
