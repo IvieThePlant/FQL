@@ -1,13 +1,15 @@
 package src;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.lang.reflect.Field;
 
 abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     /* TODO: need to implement:
      * [x] id stuff
      * [x] CRUD methods (save, delete) that call DatabaseHelper
      * [x] helper() method to get DatabaseHelper instance
-     * [ ] getColumns() to specify columns (excluding id)
+     * [x] columnsFromClass() to specify columns (excluding id)
      * [ ] static methods for all, first, where that call DatabaseHelper
      * [ ] toString() for display
      */
@@ -76,6 +78,12 @@ abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     }
 
     private static String[] columnsFromClass(Class<?> cls) {
-        return new String[] {}; // TODO: implement
+        ArrayList<String> columns = new ArrayList<>();
+        for (Field field : cls.getFields()) {
+            if (!field.getName().equals("id")) {
+                columns.add(field.getName());
+            }
+        }
+        return columns.toArray(new String[0]);
     }
 }
