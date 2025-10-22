@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -161,7 +162,22 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
                     // create a new instance of the model class
                     try {
-                        records.add(modelClass.getConstructor(HashMap.class).newInstance(recordHash));
+                        Model record = modelClass.getConstructor().newInstance();
+
+                        Field[] fields = modelClass.getDeclaredFields();
+                        
+                        for (Field field : fields) {
+                            String value = recordHash.get(field.getName());
+
+                            field.set(record, value);
+                            if (field.getType() == int.class) {
+                                field.setInt(record, Integer.parseInt(value));
+                            } else {
+                                field.set(record, value);
+                            }
+                        }
+                        
+                        records.add(record);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
