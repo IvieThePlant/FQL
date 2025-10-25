@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     private static final int UNSAVED_ID = 0;
     public int id = UNSAVED_ID;
-    public static int nextId = 0;
+    public static int nextId = 1;
 
 
     private static final HashMap<Class<?>, DatabaseHelper<?>> HELPERS = new HashMap<>();

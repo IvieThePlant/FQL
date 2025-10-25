@@ -96,7 +96,10 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     }
 
     public Model first() {
-        return find(1);
+        for (Model m : records) {
+            return m;
+        }
+        return null;
     }
 
     public int count() {
