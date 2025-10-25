@@ -4,8 +4,8 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.Paths;
 import java.nio.file.Path;
 
 public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
@@ -27,10 +27,13 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
                 this.columnHeaders[i] = nonIdColumns[i];
             }
         }
-        
+
         this.records = new ArrayList<>();
-        
-        try { Files.createDirectories(Paths.get(DB_DIR)); } catch (IOException ignored) {} // create dir if doesnt exist yet
+
+        try {
+            Files.createDirectories(Paths.get(DB_DIR));
+        } catch (IOException ignored) {
+        } // create dir if doesnt exist yet
         this.dbFile = Paths.get(DB_DIR, modelClass.getSimpleName() + ".csv");
         try {
             if (!Files.exists(this.dbFile)) {
@@ -46,14 +49,22 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
     public void add(Model model) {
         records.add(model);
-        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+        try {
+            writeToFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void update(Model model) {
         for (int i = 0; i < records.size(); i++) {
             if (records.get(i).id == model.id) {
                 records.set(i, model);
-                try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+                try {
+                    writeToFile();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 return;
             }
         }
@@ -61,11 +72,18 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
     public synchronized void delete(Model model) {
         records.removeIf(r -> r.id == model.id);
-        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+        try {
+            writeToFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Model find(int id) {
-        for (Model m : records) { if (m.id == id) return m; }
+        for (Model m : records) {
+            if (m.id == id)
+                return m;
+        }
         return null;
     }
 
@@ -73,9 +91,13 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
         return new ArrayList<>(records);
     }
 
-    public ArrayList<Model> where(HashMap<String,String> params) {
+    public ArrayList<Model> where(HashMap<String, String> params) {
         ArrayList<Model> out = new ArrayList<>();
-        for (Model m : records) { if (m.paramMatch(params)) { out.add(m); } }
+        for (Model m : records) {
+            if (m.paramMatch(params)) {
+                out.add(m);
+            }
+        }
         return out;
     }
 
@@ -89,17 +111,25 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
     public void clear() {
         records.clear();
-        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+        try {
+            writeToFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String getFileName() { return dbFile.getFileName().toString(); }
-    public String getFilePath() { return dbFile.toAbsolutePath().toString(); }
+    public String getFileName() {
+        return dbFile.getFileName().toString();
+    }
 
+    public String getFilePath() {
+        return dbFile.toAbsolutePath().toString();
+    }
 
     private void loadFromFile() {
         records.clear();
 
-        try { 
+        try {
             Scanner scanner = new Scanner(dbFile);
 
             if (scanner.hasNextLine()) {
@@ -111,10 +141,12 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
                 String[] values = scanner.nextLine().split(",");
 
                 int id = Integer.parseInt(values[0]);
-                
+
                 HashMap<String, String> paramMap = new HashMap<>();
-                
-                for (int i = 1; i < columnHeaders.length; i++) { paramMap.put(columnHeaders[i], values[i]); }
+
+                for (int i = 1; i < columnHeaders.length; i++) {
+                    paramMap.put(columnHeaders[i], values[i]);
+                }
 
                 records.add(createFromMap(id, paramMap));
             }
@@ -145,11 +177,16 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     }
 
     private static Object parseStringToFieldType(String s, Class<?> type) {
-        if (type.equals(String.class)) return s;
-        if (type.equals(Integer.class) || type.equals(int.class)) return s.isEmpty() ? null : Integer.parseInt(s);
-        if (type.equals(Long.class) || type.equals(long.class)) return s.isEmpty() ? null : Long.parseLong(s);
-        if (type.equals(Boolean.class) || type.equals(boolean.class)) return s.isEmpty() ? false : Boolean.parseBoolean(s);
-        if (type.equals(Double.class) || type.equals(double.class)) return s.isEmpty() ? null : Double.parseDouble(s);
+        if (type.equals(String.class))
+            return s;
+        if (type.equals(Integer.class) || type.equals(int.class))
+            return s.isEmpty() ? null : Integer.parseInt(s);
+        if (type.equals(Long.class) || type.equals(long.class))
+            return s.isEmpty() ? null : Long.parseLong(s);
+        if (type.equals(Boolean.class) || type.equals(boolean.class))
+            return s.isEmpty() ? false : Boolean.parseBoolean(s);
+        if (type.equals(Double.class) || type.equals(double.class))
+            return s.isEmpty() ? null : Double.parseDouble(s);
         return s;
     }
 
