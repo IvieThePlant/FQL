@@ -1,4 +1,4 @@
-// import java.util.HashMap;
+// import java.util.HashMap; only needed if using the hashmap constructor
 
 public class User extends DatabaseModel<User> {
     // fields
