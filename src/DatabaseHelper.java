@@ -9,13 +9,6 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.Path;
 
 public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
-    /* TODO:
-     * [x] constructor
-     * [x] read/write methods
-     * [x] CRUD stuff
-     * [x] first(), all(), where(), count(), clear()
-     * [x] db file name/path
-     */
     private Class<Model> modelClass;
     private String[] columnHeaders;
     private ArrayList<Model> records;
