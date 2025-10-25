@@ -6,14 +6,12 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     // id == 0 means "not yet persisted". Persisted records will get id > 0.
     public int id = 0;
 
-    // static map of helpers per model class
     private static final HashMap<Class<?>, DatabaseHelper<?>> HELPERS = new HashMap<>();
 
     // Subclasses must have a public no-arg constructor.
     public DatabaseModel() {
     }
 
-    // save(): add or update db based on id
     @SuppressWarnings("unchecked")
     public void save() {
         DatabaseHelper<Model> h = helper();
@@ -24,7 +22,6 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         }
     }
 
-    // delete(): delete from db based on id
     @SuppressWarnings("unchecked")
     public void delete() {
         DatabaseHelper<Model> h = helper();
@@ -33,10 +30,8 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         }
     }
 
-    // get or create helper instance for this model class
     @SuppressWarnings("unchecked")
     private DatabaseHelper<Model> helper() {
-        // get cached helper from map, otherwise create new one
         DatabaseHelper<Model> helper = (DatabaseHelper<Model>) HELPERS.get(this.getClass());
 
         if (helper != null) {
@@ -52,11 +47,9 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         }
     }
 
-    // get or create helper instance for another model class
     @SuppressWarnings("unchecked")
     private static <AnotherModel extends DatabaseModel<AnotherModel>> DatabaseHelper<AnotherModel> helperFor(
             Class<AnotherModel> otherClass) {
-        // get cached helper from map, otherwise create new one
         DatabaseHelper<AnotherModel> helper = (DatabaseHelper<AnotherModel>) HELPERS.get(otherClass);
 
         if (helper != null) {
@@ -80,26 +73,21 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         return columns;
     }
 
-    // Matching by params uses reflection by default. Subclasses may override for
-    // custom logic.
+    // Matching by params uses reflection by default.
+    // Subclasses may override for custom logic.
     public boolean paramMatch(HashMap<String, String> params) {
         try {
-            // for each param,
             for (String key : params.keySet()) {
-                // get field by that name (and fail if not found)
                 Field field = this.getClass().getDeclaredField(key);
                 field.setAccessible(true);
                 Object value = field.get(this);
 
-                // if the value is empty or not equal, return false
                 if (value == null || !value.toString().equals(params.get(key))) {
                     return false;
                 }
             }
 
-            // all matched, return true
             return true;
-
         } catch (NoSuchFieldException nsf) {
             return false;
         } catch (Exception e) {
@@ -108,7 +96,6 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         }
     }
 
-    // Static methods for db actions
     public static <T extends DatabaseModel<T>> ArrayList<T> all(Class<T> cls) {
         return helperFor(cls).all();
     }
