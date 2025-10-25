@@ -1,8 +1,4 @@
-package src;
-
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.lang.reflect.Field;
 
@@ -113,7 +109,7 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     // Static methods for db actions
     public static <T extends DatabaseModel<T>> ArrayList<T> all(Class<T> cls)                              { return helperFor(cls).all();         }
     public static <T extends DatabaseModel<T>> T            find(Class<T> cls, int id)                     { return helperFor(cls).find(id);      }
-    public static <T extends DatabaseModel<T>> ArrayList<T> where(Class<T> cls, Map<String,String> params) { return helperFor(cls).where(params); }
+    public static <T extends DatabaseModel<T>> ArrayList<T> where(Class<T> cls, HashMap<String,String> params) { return helperFor(cls).where(params); }
     public static <T extends DatabaseModel<T>> T            first(Class<T> cls)                            { return helperFor(cls).first();       }
     public static <T extends DatabaseModel<T>> int          count(Class<T> cls)                            { return helperFor(cls).count();       }
     public static <T extends DatabaseModel<T>> void         clear(Class<T> cls)                            {        helperFor(cls).clear();       }

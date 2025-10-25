@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class Testing {
     public static void main(String[] args) {
         // Create two users and save them
@@ -17,7 +19,7 @@ public class Testing {
         System.out.println("first record: " + f);
 
         // Where
-        java.util.Map<String,String> q = new java.util.HashMap<>();
+        HashMap<String,String> q = new HashMap<>();
         q.put("email", "piku@example.com");
         System.out.println("Where email=piku@example.com: " + User.where(User.class, q).size());
 
