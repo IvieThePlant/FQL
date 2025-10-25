@@ -72,12 +72,12 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
         }
     }
 
-    private static String[] columnsFromClass(Class<?> cls) {
+    private static ArrayList<String> columnsFromClass(Class<?> cls) {
         ArrayList<String> columns = new ArrayList<>();
         for (Field field : cls.getFields()) {
             columns.add(field.getName());
         }
-        return columns.toArray(new String[0]);
+        return columns;
     }
 
     // Matching by params uses reflection by default. Subclasses may override for

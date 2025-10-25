@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.IOException;
@@ -10,19 +11,16 @@ import java.nio.file.Path;
 
 public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     private Class<Model> modelClass;
-    private String[] columnHeaders;
+    private ArrayList<String> columnHeaders;
     private ArrayList<Model> records;
 
     private final Path dbFile;
     private static final String DB_DIR = "./database";
 
-    public DatabaseHelper(Class<Model> modelClass, String[] nonIdColumns) {
+    public DatabaseHelper(Class<Model> modelClass, ArrayList<String> columnHeaders) {
         this.modelClass = modelClass;
 
-        this.columnHeaders = new String[nonIdColumns.length + 1];
-        for (int i = 0; i < nonIdColumns.length; i++) {
-            this.columnHeaders[i] = nonIdColumns[i];
-        }
+        this.columnHeaders = columnHeaders;
 
         this.records = new ArrayList<>();
 
@@ -130,7 +128,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
             if (scanner.hasNextLine()) {
                 String headerLine = scanner.nextLine();
-                this.columnHeaders = headerLine.split(",");
+                this.columnHeaders = new ArrayList<>(Arrays.asList(headerLine.split(",")));
             }
 
             while (scanner.hasNextLine()) {
@@ -140,8 +138,8 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
                 HashMap<String, String> paramMap = new HashMap<>();
 
-                for (int i = 1; i < columnHeaders.length; i++) {
-                    paramMap.put(columnHeaders[i], values[i]);
+                for (int i = 1; i < columnHeaders.size(); i++) {
+                    paramMap.put(columnHeaders.get(i), values[i]);
                 }
 
                 records.add(createFromMap(id, paramMap));
