@@ -12,7 +12,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     /* TODO:
      * [x] constructor
      * [x] read/write methods
-     * [ ] CRUD stuff
+     * [x] CRUD stuff
      * [ ] first(), all(), where(), count(), clear()
      * [ ] db file name/path
      * [ ] CSV parsing
@@ -27,7 +27,6 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     public DatabaseHelper(Class<Model> modelClass, String[] nonIdColumns) {
         this.modelClass = modelClass;
 
-        // prepend "id" to columns
         this.columnHeaders = new String[nonIdColumns.length + 1];
         for (int i = 0; i < nonIdColumns.length; i++) {
             if (i == 0) {
@@ -39,16 +38,13 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
         
         this.records = new ArrayList<>();
         
-        // initialize db files
         try { Files.createDirectories(Paths.get(DB_DIR)); } catch (IOException ignored) {} // create dir if doesnt exist yet
         this.dbFile = Paths.get(DB_DIR, modelClass.getSimpleName() + ".csv");
         try {
             if (!Files.exists(this.dbFile)) {
                 Files.createFile(this.dbFile);
-                // write header line
                 writeToFile();
             } else {
-                // load existing records from file
                 loadFromFile();
             }
         } catch (IOException e) {
@@ -56,21 +52,37 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
         }
     }
 
+    public void add(Model model) {
+        records.add(model);
+        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+    }
+
+    public void update(Model model) {
+        for (int i = 0; i < records.size(); i++) {
+            if (records.get(i).id == model.id) {
+                records.set(i, model);
+                try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+                return;
+            }
+        }
+    }
+
+    public synchronized void delete(Model model) {
+        records.removeIf(r -> r.id == model.id);
+        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+    }
+
     private void loadFromFile() {
-        // Clear existing records
         records.clear();
 
-        // Read from file
         try { 
             Scanner scanner = new Scanner(dbFile);
 
-            // Read header line
             if (scanner.hasNextLine()) {
                 String headerLine = scanner.nextLine();
                 this.columnHeaders = headerLine.split(",");
             }
 
-            // Parse csv
             while (scanner.hasNextLine()) {
                 String[] values = scanner.nextLine().split(",");
 
@@ -120,7 +132,6 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     }
 
     private void writeToFile() throws IOException {
-        // overwrite file with headers
         Files.write(this.dbFile, String.join(",", this.columnHeaders).getBytes());
 
         for (Model record : this.records) {
@@ -138,7 +149,6 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
             }
             String line = String.join(",", values) + "\n";
 
-            // write to file
             Files.write(this.dbFile, line.getBytes(), StandardOpenOption.APPEND);
         }
     }
