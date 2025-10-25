@@ -13,7 +13,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
      * [x] constructor
      * [x] read/write methods
      * [x] CRUD stuff
-     * [ ] first(), all(), where(), count(), clear()
+     * [x] first(), all(), where(), count(), clear()
      * [ ] db file name/path
      * [ ] CSV parsing
      */
@@ -69,6 +69,40 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
     public synchronized void delete(Model model) {
         records.removeIf(r -> r.id == model.id);
+        try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
+    }
+
+    public Model find(int id) {
+        for (Model m : records) {
+            if (m.id == id) return m;
+        }
+        return null;
+    }
+
+    public ArrayList<Model> all() {
+        return new ArrayList<>(records);
+    }
+
+    public ArrayList<Model> where(HashMap<String,String> params) {
+        ArrayList<Model> out = new ArrayList<>();
+        for (Model m : records) {
+            if (m.paramMatch(params)) {
+                out.add(m);
+            }
+        }
+        return out;
+    }
+
+    public Model first() {
+        return find(1);
+    }
+
+    public int count() {
+        return records.size();
+    }
+
+    public void clear() {
+        records.clear();
         try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
     }
 
