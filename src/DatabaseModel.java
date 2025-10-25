@@ -75,9 +75,7 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     private static String[] columnsFromClass(Class<?> cls) {
         ArrayList<String> columns = new ArrayList<>();
         for (Field field : cls.getFields()) {
-            if (!field.getName().equals("id")) {
-                columns.add(field.getName());
-            }
+            columns.add(field.getName());
         }
         return columns.toArray(new String[0]);
     }

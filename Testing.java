@@ -2,6 +2,10 @@ import java.util.HashMap;
 
 public class Testing {
     public static void main(String[] args) {
+        for (java.lang.reflect.Field f : User.class.getFields()) {
+            System.out.println("Field: " + f.getName() + " Type: " + f.getType().getSimpleName());
+        }
+
         // Create two users and save them
         User u1 = new User("Piku", "piku@example.com");
         u1.save();
@@ -10,7 +14,7 @@ public class Testing {
 
         // List all users
         System.out.println("All users:");
-        for (User u : User.all(User.class)){
+        for (User u : User.all(User.class)) {
             System.out.println(u);
         }
 
@@ -19,7 +23,7 @@ public class Testing {
         System.out.println("first record: " + f);
 
         // Where
-        HashMap<String,String> q = new HashMap<>();
+        HashMap<String, String> q = new HashMap<>();
         q.put("email", "piku@example.com");
         System.out.println("Where email=piku@example.com: " + User.where(User.class, q).size());
 

@@ -21,11 +21,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
         this.columnHeaders = new String[nonIdColumns.length + 1];
         for (int i = 0; i < nonIdColumns.length; i++) {
-            if (i == 0) {
-                this.columnHeaders[0] = "id";
-            } else {
-                this.columnHeaders[i] = nonIdColumns[i];
-            }
+            this.columnHeaders[i] = nonIdColumns[i];
         }
 
         this.records = new ArrayList<>();

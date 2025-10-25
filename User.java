@@ -6,7 +6,8 @@ public class User extends DatabaseModel<User> {
     public String email;
 
     // Expext a public no-arg constructor
-    public User() {}
+    public User() {
+    }
 
     // Expect a public constructor with each field as param
     public User(String name, String email) {
@@ -14,18 +15,19 @@ public class User extends DatabaseModel<User> {
         this.email = email;
     }
 
-    /*These could be an option, but I want it to work without it too
-    public User(HashMap<String,String> params) {
-        this.name = params.get("name");
-        this.email = params.get("email");
-    }
-
-    public String[] getColumns() {
-        return new String[] { "name", "email" };
-    }
-
+    /*
+     * These could be an option, but I want it to work without it too
+     * public User(HashMap<String,String> params) {
+     * this.name = params.get("name");
+     * this.email = params.get("email");
+     * }
+     * 
+     * public String[] getColumns() {
+     * return new String[] { "name", "email" };
+     * }
+     * 
+     */
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
     }
-    */
 }
