@@ -14,8 +14,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
      * [x] read/write methods
      * [x] CRUD stuff
      * [x] first(), all(), where(), count(), clear()
-     * [ ] db file name/path
-     * [ ] CSV parsing
+     * [x] db file name/path
      */
     private Class<Model> modelClass;
     private String[] columnHeaders;
@@ -105,6 +104,10 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
         records.clear();
         try { writeToFile(); } catch (IOException e) { throw new RuntimeException(e); }
     }
+
+    public String getFileName() { return dbFile.getFileName().toString(); }
+    public String getFilePath() { return dbFile.toAbsolutePath().toString(); }
+
 
     private void loadFromFile() {
         records.clear();
