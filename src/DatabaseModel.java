@@ -3,8 +3,10 @@ import java.util.ArrayList;
 import java.lang.reflect.Field;
 
 public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
-    // id == 0 means "not yet persisted". Persisted records will get id > 0.
-    public int id = 0;
+    private static final int UNSAVED_ID = 0;
+    public int id = UNSAVED_ID;
+    public static int nextId = 0;
+
 
     private static final HashMap<Class<?>, DatabaseHelper<?>> HELPERS = new HashMap<>();
 
@@ -15,7 +17,8 @@ public abstract class DatabaseModel<Model extends DatabaseModel<Model>> {
     @SuppressWarnings("unchecked")
     public void save() {
         DatabaseHelper<Model> h = helper();
-        if (this.id <= 0) {
+        if (this.id == UNSAVED_ID) {
+            this.id = nextId++;
             h.add((Model) this);
         } else {
             h.update((Model) this);
