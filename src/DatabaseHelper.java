@@ -65,9 +65,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
     }
 
     public Model find(int id) {
-        for (Model m : records) {
-            if (m.id == id) return m;
-        }
+        for (Model m : records) { if (m.id == id) return m; }
         return null;
     }
 
@@ -77,11 +75,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
 
     public ArrayList<Model> where(HashMap<String,String> params) {
         ArrayList<Model> out = new ArrayList<>();
-        for (Model m : records) {
-            if (m.paramMatch(params)) {
-                out.add(m);
-            }
-        }
+        for (Model m : records) { if (m.paramMatch(params)) { out.add(m); } }
         return out;
     }
 
@@ -120,9 +114,7 @@ public final class DatabaseHelper<Model extends DatabaseModel<Model>> {
                 
                 HashMap<String, String> paramMap = new HashMap<>();
                 
-                for (int i = 1; i < columnHeaders.length; i++) {
-                    paramMap.put(columnHeaders[i], values[i]);
-                }
+                for (int i = 1; i < columnHeaders.length; i++) { paramMap.put(columnHeaders[i], values[i]); }
 
                 records.add(createFromMap(id, paramMap));
             }
