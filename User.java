@@ -1,13 +1,12 @@
 public class User extends DatabaseModel<User> {
-    // fields
+    // Example variables
     public String name;
     public String email;
 
-    // Expext a public no-arg constructor
+    // Must have a public no-arg constructor
     public User() {
     }
 
-    // Expect a public constructor with each field as param
     public User(String name, String email) {
         this.name = name;
         this.email = email;
