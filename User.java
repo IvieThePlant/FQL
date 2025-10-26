@@ -1,5 +1,3 @@
-// import java.util.HashMap; only needed if using the hashmap constructor
-
 public class User extends DatabaseModel<User> {
     // fields
     public String name;
@@ -15,18 +13,6 @@ public class User extends DatabaseModel<User> {
         this.email = email;
     }
 
-    /*
-     * These could be an option, but I want it to work without it too
-     * public User(HashMap<String,String> params) {
-     * this.name = params.get("name");
-     * this.email = params.get("email");
-     * }
-     * 
-     * public String[] getColumns() {
-     * return new String[] { "name", "email" };
-     * }
-     * 
-     */
     public String toString() {
         return this.id + ", " + this.name + ", " + this.email;
     }
